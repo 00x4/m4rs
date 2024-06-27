@@ -13,7 +13,13 @@
     - SMA
 - Call it "Mars"
 
-# Example
+# Installation
+
+```sh
+cargo add m4rs
+```
+
+# Examples
 
 ```rust
 fn sample() {
