@@ -1,0 +1,11 @@
+[package]
+name = "m4rs"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Moving Average indicator library for Rust"
+homepage = "https://github.com/00x4/m4rs/"
+readme = "README.md"
+documentation = "https://github.com/00x4/m4rs"
+repository = "https://github.com/00x4/m4rs"
+categories = ["finance"]
