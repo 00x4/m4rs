@@ -6,6 +6,6 @@ license = "MIT OR Apache-2.0"
 description = "Moving Average indicator library for Rust"
 homepage = "https://github.com/00x4/m4rs/"
 readme = "README.md"
-documentation = "https://github.com/00x4/m4rs"
+documentation = "https://docs.rs/m4rs/latest/m4rs/"
 repository = "https://github.com/00x4/m4rs"
 categories = ["finance"]
