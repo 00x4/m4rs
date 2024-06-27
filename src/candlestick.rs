@@ -104,3 +104,98 @@ impl Candlestick {
         self.open.min(self.close) - self.low
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::IndexEntryLike;
+
+    #[test]
+    fn test_candlestick_to_volume_entry() {
+        let c1 = super::Candlestick::new(1001, 10.0, 20.0, 5.0, 9.0, 123.0);
+        assert_eq!(1001, c1.get_at());
+        assert_eq!(9.0, c1.get_value());
+
+        let got = c1.to_volume_entry();
+        assert_eq!(1001, got.get_at());
+        assert_eq!(123.0, got.get_value());
+    }
+
+    #[test]
+    fn test_candlestick_typical_price() {
+        let h = 20.0;
+        let l = 5.0;
+        let c = 9.0;
+        let c1 = super::Candlestick::new(1001, 10.0, h, l, c, 123.0);
+        assert_eq!((h + l + c) / 3.0, c1.typical_price());
+    }
+
+    #[test]
+    fn test_candlestick_to_typical_price_entry() {
+        let h = 20.0;
+        let l = 5.0;
+        let c = 9.0;
+        let c1 = super::Candlestick::new(1001, 10.0, h, l, c, 123.0);
+        assert_eq!(1001, c1.get_at());
+        assert_eq!(c, c1.get_value());
+
+        let got = c1.to_typical_price_entry();
+        assert_eq!(1001, got.get_at());
+        assert_eq!((h + l + c) / 3.0, got.get_value());
+    }
+
+    #[test]
+    fn test_candlestick_is_bullish_or_bearish() {
+        let c1 = super::Candlestick::new(1001, 10.0, 20.0, 5.0, 15.0, 123.0);
+        assert!(c1.is_bullish());
+        assert!(!c1.is_bearish());
+
+        let c2 = super::Candlestick::new(1001, 10.0, 20.0, 5.0, 5.0, 123.0);
+        assert!(!c2.is_bullish());
+        assert!(c2.is_bearish());
+
+        let c3 = super::Candlestick::new(1001, 10.0, 20.0, 5.0, 10.0, 123.0);
+        assert!(!c3.is_bullish());
+        assert!(!c3.is_bearish());
+    }
+
+    #[test]
+    fn test_candlestick_body() {
+        let c1 = super::Candlestick::new(1001, 10.0, 20.0, 5.0, 15.0, 123.0);
+        assert_eq!(5.0, c1.body_size());
+        assert_eq!(15.0, c1.body_high());
+        assert_eq!(10.0, c1.body_low());
+
+        let c2 = super::Candlestick::new(1001, 10.0, 20.0, 5.0, 6.0, 123.0);
+        assert_eq!(4.0, c2.body_size());
+        assert_eq!(10.0, c2.body_high());
+        assert_eq!(6.0, c2.body_low());
+
+        let c3 = super::Candlestick::new(1001, 10.0, 20.0, 5.0, 10.0, 123.0);
+        assert_eq!(0.0, c3.body_size());
+        assert_eq!(10.0, c3.body_high());
+        assert_eq!(10.0, c3.body_low());
+    }
+
+    #[test]
+    fn test_candlestick_shadow() {
+        let c1 = super::Candlestick::new(1001, 10.0, 20.0, 5.0, 15.0, 123.0);
+        assert_eq!(5.0, c1.upper_shadow_size());
+        assert_eq!(5.0, c1.lower_shadow_size());
+
+        let c2 = super::Candlestick::new(1001, 10.0, 20.0, 5.0, 6.0, 123.0);
+        assert_eq!(10.0, c2.upper_shadow_size());
+        assert_eq!(1.0, c2.lower_shadow_size());
+
+        let c3 = super::Candlestick::new(1001, 10.0, 20.0, 5.0, 10.0, 123.0);
+        assert_eq!(10.0, c3.upper_shadow_size());
+        assert_eq!(5.0, c3.lower_shadow_size());
+
+        let c4 = super::Candlestick::new(1001, 10.0, 10.0, 5.0, 10.0, 123.0);
+        assert_eq!(0.0, c4.upper_shadow_size());
+        assert_eq!(5.0, c4.lower_shadow_size());
+
+        let c5 = super::Candlestick::new(1001, 10.0, 20.0, 10.0, 10.0, 123.0);
+        assert_eq!(10.0, c5.upper_shadow_size());
+        assert_eq!(0.0, c5.lower_shadow_size());
+    }
+}
