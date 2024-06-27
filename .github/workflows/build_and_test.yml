@@ -1,0 +1,13 @@
+name: Build and Test
+
+on: [push, pull_request]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cargo build
+      - run: cargo fmt --check
+      - run: cargo clippy
+      - run: cargo test
