@@ -2,7 +2,7 @@
 name = "m4rs"
 version = "0.1.0"
 edition = "2021"
-license = "MIT"
+license = "MIT OR Apache-2.0"
 description = "Moving Average indicator library for Rust"
 homepage = "https://github.com/00x4/m4rs/"
 readme = "README.md"
