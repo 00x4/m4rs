@@ -1,3 +1,5 @@
+//! Candlestick (OHLCV) data object
+
 use std::fmt::Display;
 
 use super::{IndexEntry, IndexEntryLike};

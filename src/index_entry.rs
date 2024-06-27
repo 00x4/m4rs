@@ -1,3 +1,5 @@
+//! Simple index data object
+
 use std::fmt::Display;
 
 /// Abstract type of IndexEntry
