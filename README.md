@@ -5,6 +5,7 @@
 - No extra dependencies
 - Supports following indicators
     - ATR
+    - Bolinger Band
     - EMA
     - Ichimoku Kinko Hyo
     - MACD

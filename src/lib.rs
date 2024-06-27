@@ -1,4 +1,5 @@
 pub mod atr;
+pub mod bolinger_band;
 pub mod candlestick;
 pub mod ema;
 pub mod ichimoku;
@@ -9,6 +10,7 @@ pub mod rsi;
 pub mod sma;
 
 pub use atr::*;
+pub use bolinger_band::*;
 pub use candlestick::*;
 pub use ema::*;
 pub use ichimoku::*;
