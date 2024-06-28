@@ -12,6 +12,7 @@
     - RMA
     - RSI
     - SMA
+    - Stochastics
 - Call it "Mars"
 
 # Installation

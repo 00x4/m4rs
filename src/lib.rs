@@ -8,6 +8,7 @@ pub mod macd;
 pub mod rma;
 pub mod rsi;
 pub mod sma;
+pub mod stochastics;
 
 pub use atr::*;
 pub use bolinger_band::*;
@@ -19,3 +20,4 @@ pub use macd::*;
 pub use rma::*;
 pub use rsi::*;
 pub use sma::*;
+pub use stochastics::*;
