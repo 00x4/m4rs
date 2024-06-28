@@ -22,7 +22,7 @@ pub fn ema(entries: &[impl IndexEntryLike], duration: usize) -> Vec<IndexEntry> 
     ema_with_alpha(entries, duration, 2.0 / ((duration as f64) + 1.0))
 }
 
-pub fn ema_with_alpha<T: IndexEntryLike>(
+pub(crate) fn ema_with_alpha<T: IndexEntryLike>(
     entries: &[T],
     duration: usize,
     alpha: f64,
