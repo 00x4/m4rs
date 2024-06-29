@@ -1,6 +1,6 @@
-# m4rs
+# m4rs - Moving Average for Rust
 
-- Moving Average indicator library for Rust
+- Trading indicator library
 - Small and simple implementation
 - No extra dependencies
 - Supports following indicators
@@ -24,7 +24,8 @@ cargo add m4rs
 # Examples
 
 ```rust
-// Prepare candlesticks in some way
+// Prepare candlesticks in some way such as by retrieving them from the exchange's API
+// And make them into m4rs::Candlestick objects
 let entries: Vec<m4rs::Candlestick> = vec![
     (1719400001, 100.0, 130.0, 90.0, 110.0, 1000.0),
     (1719400002, 110.0, 140.0, 100.0, 130.0, 1000.0),
