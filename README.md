@@ -6,6 +6,7 @@
 - Supports following indicators
     - ATR
     - Bolinger Band
+    - DMI/ADX
     - EMA
     - Ichimoku Kinko Hyo
     - MACD

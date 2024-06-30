@@ -1,6 +1,7 @@
 pub mod atr;
 pub mod bolinger_band;
 pub mod candlestick;
+pub mod dmi;
 pub mod ema;
 pub mod ichimoku;
 pub mod index_entry;
@@ -13,6 +14,7 @@ pub mod stochastics;
 pub use atr::*;
 pub use bolinger_band::*;
 pub use candlestick::*;
+pub use dmi::*;
 pub use ema::*;
 pub use ichimoku::*;
 pub use index_entry::*;
