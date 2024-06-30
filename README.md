@@ -8,6 +8,7 @@
     - Bolinger Band
     - DMI/ADX
     - EMA
+    - Heikin Ashi
     - Ichimoku Kinko Hyo
     - MACD
     - RMA
