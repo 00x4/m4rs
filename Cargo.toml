@@ -8,3 +8,4 @@ homepage = "https://github.com/00x4/m4rs/"
 readme = "README.md"
 repository = "https://github.com/00x4/m4rs"
 categories = ["finance"]
+keywords = ["finance", "trading", "indicators", "charts", "stock"]
