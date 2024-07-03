@@ -1,4 +1,4 @@
-//! Simple Moving Average
+//! SMA (Simple Moving Average)
 //!
 //! # Examples
 //! ```rust

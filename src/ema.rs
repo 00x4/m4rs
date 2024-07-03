@@ -1,4 +1,4 @@
-//! Exponential Moving Average
+//! EMA (Exponential Moving Average)
 //!
 //! # Examples
 //! ```rust

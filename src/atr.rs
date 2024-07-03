@@ -1,4 +1,4 @@
-//! Average True Range
+//! ATR (Average True Range)
 //!
 //! # Examples
 //! ```rust

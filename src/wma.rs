@@ -1,4 +1,4 @@
-//! Weighted Moving Average
+//! WMA (Weighted Moving Average)
 //!
 //! # Examples
 //! ```rust

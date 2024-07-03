@@ -11,8 +11,11 @@
 //!     m4rs::Candlestick::new(1719400005, 90.0, 100.0, 70.0, 82.0, 1000.0),
 //! ];
 //!
-//! // Get Stochastics calculation result
+//! // Get Fast Stochastics calculation result
 //! let result = m4rs::stochastics(&candlesticks, 14, 3);
+//!
+//! // Get Slow Stochastics calculation result
+//! let result = m4rs::slow_stochastics(&candlesticks, 14, 3, 5);
 //! ```
 
 use std::fmt::Display;

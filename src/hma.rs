@@ -1,4 +1,4 @@
-//! Hull Moving Average
+//! HMA (Hull Moving Average)
 //!
 //! # Examples
 //! ```rust

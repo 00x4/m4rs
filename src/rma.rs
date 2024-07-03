@@ -1,4 +1,4 @@
-//! Running Moving Average
+//! RMA (Running Moving Average)
 //!
 //! # Examples
 //! ```rust
