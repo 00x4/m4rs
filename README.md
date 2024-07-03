@@ -15,7 +15,7 @@
     - RMA
     - RSI
     - SMA
-    - Stochastics
+    - Stochastics (Fast, Slow)
     - WMA
 - Call it "Mars"
 
@@ -59,3 +59,7 @@ for x in &result {
 // 1719400008: 160.0
 // 1719400009: 186.7
 ```
+
+# API Reference
+
+- https://docs.rs/m4rs/latest/m4rs/
