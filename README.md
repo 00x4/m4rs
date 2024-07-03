@@ -9,6 +9,7 @@
     - DMI/ADX
     - EMA
     - Heikin Ashi
+    - HMA
     - Ichimoku Kinko Hyo
     - MACD
     - RMA
