@@ -15,6 +15,7 @@
     - RSI
     - SMA
     - Stochastics
+    - WMA
 - Call it "Mars"
 
 # Installation

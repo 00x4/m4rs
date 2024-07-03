@@ -11,6 +11,7 @@ pub mod rma;
 pub mod rsi;
 pub mod sma;
 pub mod stochastics;
+pub mod wma;
 
 pub use atr::*;
 pub use bolinger_band::*;
@@ -25,3 +26,4 @@ pub use rma::*;
 pub use rsi::*;
 pub use sma::*;
 pub use stochastics::*;
+pub use wma::*;
