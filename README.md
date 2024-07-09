@@ -1,5 +1,7 @@
 # m4rs - Moving Average for Rust
 
+[![crates.io](https://img.shields.io/crates/v/m4rs)](https://crates.io/crates/m4rs)
+
 - Trading indicator library
 - Small and simple implementation
 - No extra dependencies
