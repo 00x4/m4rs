@@ -6,6 +6,7 @@
 - Supports following indicators
     - ATR
     - Bolinger Band
+    - CCI
     - DMI/ADX
     - EMA
     - Heikin Ashi
