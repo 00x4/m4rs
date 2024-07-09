@@ -1,6 +1,7 @@
 pub mod atr;
 pub mod bolinger_band;
 pub mod candlestick;
+pub mod cci;
 pub mod dmi;
 pub mod ema;
 pub mod heikin_ashi;
@@ -17,6 +18,7 @@ pub mod wma;
 pub use atr::*;
 pub use bolinger_band::*;
 pub use candlestick::*;
+pub use cci::*;
 pub use dmi::*;
 pub use ema::*;
 pub use heikin_ashi::*;
