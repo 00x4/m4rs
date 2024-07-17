@@ -29,7 +29,7 @@ pub fn cci(entries: &[Candlestick], duration: usize) -> Vec<IndexEntry> {
     let mut sorted = entries.to_owned();
     sorted.sort_by(|a, b| a.at.cmp(&b.at));
 
-    let tp: Vec<IndexEntry> = entries.iter().map(|x| x.to_typical_price_entry()).collect();
+    let tp: Vec<IndexEntry> = sorted.iter().map(|x| x.to_typical_price_entry()).collect();
     let ma = sma(&tp, duration);
 
     average_deviations(&tp, duration)
