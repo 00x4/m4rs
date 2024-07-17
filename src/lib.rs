@@ -1,4 +1,5 @@
 pub mod atr;
+pub mod awesome_oscillator;
 pub mod bolinger_band;
 pub mod candlestick;
 pub mod cci;
@@ -16,6 +17,7 @@ pub mod stochastics;
 pub mod wma;
 
 pub use atr::*;
+pub use awesome_oscillator::*;
 pub use bolinger_band::*;
 pub use candlestick::*;
 pub use cci::*;
