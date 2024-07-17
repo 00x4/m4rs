@@ -7,6 +7,7 @@
 - No extra dependencies
 - Supports following indicators
     - ATR
+    - Awesome Oscillator
     - Bolinger Band
     - CCI
     - DMI/ADX
