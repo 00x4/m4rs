@@ -16,6 +16,7 @@
     - HMA
     - Ichimoku Kinko Hyo
     - MACD
+    - Momentum
     - RMA
     - RSI
     - SMA
