@@ -12,6 +12,7 @@
     - CCI
     - DMI/ADX
     - EMA
+    - Envelope
     - Heikin Ashi
     - HMA
     - Ichimoku Kinko Hyo
