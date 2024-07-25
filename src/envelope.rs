@@ -11,13 +11,16 @@
 //!     m4rs::Candlestick::new(1719400005, 90.0, 100.0, 70.0, 82.0, 1000.0),
 //! ];
 //!
-//! // Get Envelope calculation result
-//! let result = m4rs::envelope(&candlesticks, 20, 10.0);
+//! // Get 20SMA
+//! let ma = m4rs::sma(&candlesticks, 20);
+//!
+//! // Get Envelope with 10% range
+//! let result = m4rs::envelope(&ma, 10.0);
 //! ```
 
 use std::fmt::Display;
 
-use crate::{sma, IndexEntryLike};
+use crate::IndexEntryLike;
 
 #[derive(Clone, Debug)]
 pub struct EnvelopeEntry {
@@ -48,25 +51,14 @@ impl IndexEntryLike for EnvelopeEntry {
 }
 
 /// Returns Envelope for given IndexEntry list
-pub fn envelope(
-    entries: &[impl IndexEntryLike],
-    duration: usize,
-    percent: f32,
-) -> Vec<EnvelopeEntry> {
-    if duration == 0 || entries.len() < duration {
-        return vec![];
-    }
-    let mut sorted = entries.to_owned();
-    sorted.sort_by_key(|x| x.get_at());
-
-    let ma = sma(&sorted, duration);
-
-    ma.iter()
-        .map(|ma| {
-            let basis = ma.value;
+pub fn envelope(entries: &[impl IndexEntryLike], percent: f32) -> Vec<EnvelopeEntry> {
+    entries
+        .iter()
+        .map(|x| {
+            let basis = x.get_value();
             let pct = percent as f64 / 100.0;
             EnvelopeEntry {
-                at: ma.at,
+                at: x.get_at(),
                 basis,
                 upper: basis * (1.0 + pct),
                 lower: basis * (1.0 - pct),
