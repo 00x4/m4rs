@@ -48,6 +48,17 @@ impl Candlestick {
         }
     }
 
+    pub(crate) fn validate_list(xs: &[Self]) -> Result<(), Box<dyn std::error::Error>> {
+        for x in xs {
+            IndexEntry::validate(x.at, x.open)?;
+            IndexEntry::validate(x.at, x.high)?;
+            IndexEntry::validate(x.at, x.low)?;
+            IndexEntry::validate(x.at, x.close)?;
+            IndexEntry::validate(x.at, x.volume)?;
+        }
+        Ok(())
+    }
+
     /// Converts to IndexEntry with value field as volume
     pub fn to_volume_entry(&self) -> IndexEntry {
         IndexEntry {
@@ -107,7 +118,9 @@ impl Candlestick {
 
 #[cfg(test)]
 mod tests {
-    use crate::IndexEntryLike;
+    use std::f64::{INFINITY, NAN};
+
+    use crate::{Candlestick, Error, IndexEntryLike};
 
     #[test]
     fn test_candlestick_to_volume_entry() {
@@ -197,5 +210,44 @@ mod tests {
         let c5 = super::Candlestick::new(1001, 10.0, 20.0, 10.0, 10.0, 123.0);
         assert_eq!(10.0, c5.upper_shadow_size());
         assert_eq!(0.0, c5.lower_shadow_size());
+    }
+
+    #[test]
+    fn test_validate_list() {
+        // valid list
+        let res = Candlestick::validate_list(&vec![
+            Candlestick::new(1719400001, 100.0, 130.0, 90.0, 110.0, 1000.0),
+            Candlestick::new(1719400002, 110.0, 140.0, 100.0, 130.0, 1000.0),
+            Candlestick::new(1719400003, 130.0, 135.0, 120.0, 120.0, 1000.0),
+            Candlestick::new(1719400004, 120.0, 130.0, 80.0, 95.0, 1000.0),
+            Candlestick::new(1719400005, 90.0, 100.0, 70.0, 82.0, 1000.0),
+        ]);
+        assert!(res.is_ok());
+
+        // invalid: contains NAN
+        let res = Candlestick::validate_list(&vec![
+            Candlestick::new(1719400001, 100.0, 130.0, 90.0, 110.0, 1000.0),
+            Candlestick::new(1719400002, 110.0, 140.0, 100.0, 130.0, 1000.0),
+            Candlestick::new(1719400003, 130.0, NAN, 120.0, 120.0, 1000.0),
+            Candlestick::new(1719400004, 120.0, 130.0, 80.0, 95.0, 1000.0),
+            Candlestick::new(1719400005, 90.0, 100.0, 70.0, 82.0, 1000.0),
+        ]);
+        assert!(res.is_err());
+        let res = res.err().unwrap();
+        let e = res.downcast_ref::<Error>();
+        assert!(matches!(e, Some(Error::ContainsNaN(1719400003))));
+
+        // invalid: contains INFINITY
+        let res = Candlestick::validate_list(&vec![
+            Candlestick::new(1719400001, 100.0, 130.0, 90.0, 110.0, 1000.0),
+            Candlestick::new(1719400002, 110.0, 140.0, 100.0, 130.0, 1000.0),
+            Candlestick::new(1719400003, 130.0, 135.0, 120.0, 120.0, 1000.0),
+            Candlestick::new(1719400004, 120.0, 130.0, 80.0, 95.0, INFINITY),
+            Candlestick::new(1719400005, 90.0, 100.0, 70.0, 82.0, 1000.0),
+        ]);
+        assert!(res.is_err());
+        let res = res.err().unwrap();
+        let e = res.downcast_ref::<Error>();
+        assert!(matches!(e, Some(Error::ContainsInfinite(1719400004))));
     }
 }
