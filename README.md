@@ -54,7 +54,7 @@ let entries: Vec<m4rs::Candlestick> = vec![
 .collect();
 
 // Get 3SMA calculation result
-let result = m4rs::sma(&entries, 3);
+let result = m4rs::sma(&entries, 3).unwrap();
 
 for x in &result {
     println!("{}: {:.1}", x.at, x.value);
