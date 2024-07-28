@@ -20,13 +20,19 @@ use std::cmp::Ordering;
 use crate::{IndexEntry, IndexEntryLike};
 
 /// Returns RCI for given IndexEntry list
-pub fn rci(entries: &[impl IndexEntryLike], duration: usize) -> Vec<IndexEntry> {
+pub fn rci(
+    entries: &[impl IndexEntryLike],
+    duration: usize,
+) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
     if duration == 0 || entries.len() < duration {
-        return vec![];
+        return Ok(vec![]);
     }
+    IndexEntry::validate_list(entries)?;
+
     let mut sorted = entries.to_owned();
     sorted.sort_by_key(|x| x.get_at());
-    (0..=sorted.len() - duration)
+
+    Ok((0..=sorted.len() - duration)
         .map(|i| {
             let xs: Vec<_> = sorted.iter().skip(i).take(duration).collect();
             let last = xs.last().unwrap();
@@ -65,5 +71,5 @@ pub fn rci(entries: &[impl IndexEntryLike], duration: usize) -> Vec<IndexEntry> 
                 value: (1.0 - (6.0 * d) / (duration.powi(3) - duration)) * 100.0,
             }
         })
-        .collect()
+        .collect())
 }
