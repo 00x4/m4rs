@@ -85,34 +85,37 @@ impl IchimokuData {
 }
 
 /// Returns Ichimoku Kinkohyo for given Candlestick list with default parameters
-pub fn ichimoku_default(entries: &[Candlestick]) -> IchimokuData {
+pub fn ichimoku_default(
+    entries: &[Candlestick],
+) -> Result<IchimokuData, Box<dyn std::error::Error>> {
     ichimoku(entries, 9, 26, 52, 26)
 }
 
 /// Returns Ichimoku Kinkohyo for given Candlestick list with custom parameters
 pub fn ichimoku(
     entries: &[Candlestick],
-    conversion_line_len: u16,
-    base_line_len: u16,
-    leading_span_b_len: u16,
-    lagging_span: u16,
-) -> IchimokuData {
+    conversion_line_len: usize,
+    base_line_len: usize,
+    leading_span_b_len: usize,
+    lagging_span: usize,
+) -> Result<IchimokuData, Box<dyn std::error::Error>> {
+    Candlestick::validate_list(entries)?;
+
     let base_line = calc_base_and_conversion_line(entries, base_line_len);
     let conversion_line = calc_base_and_conversion_line(entries, conversion_line_len);
-    IchimokuData {
+    Ok(IchimokuData {
         conversion_line: conversion_line.clone(),
         base_line: base_line.clone(),
         leading_span_a: calc_leading_span_a(&base_line, &conversion_line, lagging_span),
         leading_span_b: calc_leading_span_b(entries, leading_span_b_len, lagging_span),
         lagging_span: calc_lagging_span(entries, lagging_span),
-    }
+    })
 }
 
-fn calc_base_and_conversion_line(entries: &[Candlestick], line_len: u16) -> Vec<IndexEntry> {
+fn calc_base_and_conversion_line(entries: &[Candlestick], line_len: usize) -> Vec<IndexEntry> {
     if line_len == 0 {
         return vec![];
     }
-    let line_len = line_len as usize;
     let mut ret = Vec::<IndexEntry>::new();
     for i in 0..entries.len() {
         if entries.len() < i + line_len {
@@ -137,7 +140,7 @@ fn calc_base_and_conversion_line(entries: &[Candlestick], line_len: u16) -> Vec<
 fn calc_leading_span_a(
     base_line: &[IndexEntry],
     conversion_line: &[IndexEntry],
-    span: u16,
+    span: usize,
 ) -> Vec<IndexEntry> {
     let entries: Vec<IndexEntry> = base_line
         .iter()
@@ -155,7 +158,7 @@ fn calc_leading_span_a(
     apply_lag(&entries, span, false)
 }
 
-fn calc_leading_span_b(entries: &[Candlestick], line_len: u16, span: u16) -> Vec<IndexEntry> {
+fn calc_leading_span_b(entries: &[Candlestick], line_len: usize, span: usize) -> Vec<IndexEntry> {
     apply_lag(
         &calc_base_and_conversion_line(entries, line_len),
         span,
@@ -163,11 +166,11 @@ fn calc_leading_span_b(entries: &[Candlestick], line_len: u16, span: u16) -> Vec
     )
 }
 
-fn calc_lagging_span(entries: &[Candlestick], span: u16) -> Vec<IndexEntry> {
+fn calc_lagging_span(entries: &[Candlestick], span: usize) -> Vec<IndexEntry> {
     apply_lag(entries, span, true)
 }
 
-fn apply_lag(entries: &[impl IndexEntryLike], span: u16, backward: bool) -> Vec<IndexEntry> {
+fn apply_lag(entries: &[impl IndexEntryLike], span: usize, backward: bool) -> Vec<IndexEntry> {
     if entries.len() < 2 || span == 0 {
         return entries.iter().map(|x| IndexEntry::from(x)).collect();
     }
