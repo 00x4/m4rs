@@ -105,15 +105,16 @@ pub fn stochastics(
     entries: &[Candlestick],
     duration_k: usize,
     duration_d: usize,
-) -> Vec<StochasticsEntry> {
+) -> Result<Vec<StochasticsEntry>, Box<dyn std::error::Error>> {
     if duration_k == 0 || duration_d == 0 || entries.len() < duration_k {
-        return vec![];
+        return Ok(vec![]);
     }
     let mut sorted = entries.to_owned();
     sorted.sort_by_key(|x| x.get_at());
     let ks = calc_k(&sorted, duration_k);
-    let ds = sma(&ks, duration_d);
-    ds.iter()
+    let ds = sma(&ks, duration_d)?;
+    Ok(ds
+        .iter()
         .filter_map(|d| {
             ks.iter().find(|x| x.at == d.at).map(|k| StochasticsEntry {
                 at: k.at,
@@ -121,7 +122,7 @@ pub fn stochastics(
                 d: d.value,
             })
         })
-        .collect()
+        .collect())
 }
 
 /// Returns Slow Stochastics for given Candlestick list
@@ -130,16 +131,20 @@ pub fn slow_stochastics(
     duration_k: usize,
     duration_d: usize,
     duration_sd: usize,
-) -> Vec<SlowStochasticsEntry> {
+) -> Result<Vec<SlowStochasticsEntry>, Box<dyn std::error::Error>> {
     if duration_k == 0 || duration_d == 0 || duration_sd == 0 || entries.len() < duration_k {
-        return vec![];
+        return Ok(vec![]);
     }
+
+    Candlestick::validate_list(entries)?;
+
     let mut sorted = entries.to_owned();
     sorted.sort_by_key(|x| x.get_at());
     let ks = calc_k(&sorted, duration_k);
-    let ds = sma(&ks, duration_d);
-    let sds = sma(&ds, duration_sd);
-    sds.iter()
+    let ds = sma(&ks, duration_d)?;
+    let sds = sma(&ds, duration_sd)?;
+    Ok(sds
+        .iter()
         .map(|sd| SlowStochasticsEntry {
             at: sd.at,
             k: 0.0,
@@ -148,7 +153,7 @@ pub fn slow_stochastics(
         })
         .filter_map(|x| ds.iter().find(|d| d.at == x.at).map(|d| x.with_d(d.value)))
         .filter_map(|x| ks.iter().find(|k| k.at == x.at).map(|k| x.with_k(k.value)))
-        .collect()
+        .collect())
 }
 
 fn calc_k(entries: &[Candlestick], duration: usize) -> Vec<IndexEntry> {

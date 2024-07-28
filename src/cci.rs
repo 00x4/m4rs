@@ -22,17 +22,22 @@ use super::Candlestick;
 use super::IndexEntry;
 
 /// Returns CCI for given Candlestick list
-pub fn cci(entries: &[Candlestick], duration: usize) -> Vec<IndexEntry> {
+pub fn cci(
+    entries: &[Candlestick],
+    duration: usize,
+) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
     if duration == 0 || entries.len() < duration {
-        return vec![];
+        return Ok(vec![]);
     }
+    Candlestick::validate_list(entries)?;
+
     let mut sorted = entries.to_owned();
     sorted.sort_by(|a, b| a.at.cmp(&b.at));
 
     let tp: Vec<IndexEntry> = sorted.iter().map(|x| x.to_typical_price_entry()).collect();
-    let ma = sma(&tp, duration);
+    let ma = sma(&tp, duration)?;
 
-    average_deviations(&tp, duration)
+    Ok(average_deviations(&tp, duration)
         .iter()
         .filter_map(|md| {
             match (
@@ -46,7 +51,7 @@ pub fn cci(entries: &[Candlestick], duration: usize) -> Vec<IndexEntry> {
                 _ => None,
             }
         })
-        .collect()
+        .collect())
 }
 
 fn average_deviations(xs: &[IndexEntry], duration: usize) -> Vec<IndexEntry> {

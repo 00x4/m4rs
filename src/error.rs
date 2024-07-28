@@ -4,6 +4,10 @@ use std::fmt::Display;
 pub enum Error {
     ContainsNaN(u64),
     ContainsInfinite(u64),
+    ContainsContradictionInTwoDurations {
+        short_duration: usize,
+        long_duration: usize,
+    },
 }
 
 impl Display for Error {
