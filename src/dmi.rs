@@ -81,12 +81,18 @@ impl Calc {
 }
 
 /// Returns DMI/ADX for given IndexEntry list
-pub fn dmi(entries: &[Candlestick], duration: usize) -> Vec<DmiEntry> {
+pub fn dmi(
+    entries: &[Candlestick],
+    duration: usize,
+) -> Result<Vec<DmiEntry>, Box<dyn std::error::Error>> {
     if duration == 0 || entries.len() < duration {
-        return vec![];
+        return Ok(vec![]);
     }
+    Candlestick::validate_list(entries)?;
+
     let mut sorted = entries.to_owned();
     sorted.sort_by(|a, b| a.at.cmp(&b.at));
+
     let calcs = calc_dm(&sorted);
     let plus_dm_ma = wilder_ma(
         &calcs
@@ -135,12 +141,13 @@ pub fn dmi(entries: &[Candlestick], duration: usize) -> Vec<DmiEntry> {
             .collect::<Vec<IndexEntry>>(),
         duration,
     );
-    dmis.filter_map(|dmi| {
-        adxs.iter()
-            .find(|x| x.at == dmi.at)
-            .map(|adx| dmi.with_adx(adx.value))
-    })
-    .collect()
+    Ok(dmis
+        .filter_map(|dmi| {
+            adxs.iter()
+                .find(|x| x.at == dmi.at)
+                .map(|adx| dmi.with_adx(adx.value))
+        })
+        .collect())
 }
 
 fn calc_dm(entries: &[Candlestick]) -> Vec<Calc> {
@@ -180,5 +187,5 @@ fn calc_dm(entries: &[Candlestick]) -> Vec<Calc> {
 }
 
 fn wilder_ma(entries: &[impl IndexEntryLike], duration: usize) -> Vec<IndexEntry> {
-    ema(entries, duration * 2 - 1)
+    ema(entries, duration * 2 - 1).unwrap()
 }
