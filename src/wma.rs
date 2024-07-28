@@ -18,15 +18,19 @@
 use super::{IndexEntry, IndexEntryLike};
 
 /// Returns WMA (Weighted Moving Average) for given IndexEntry list
-pub fn wma(entries: &[impl IndexEntryLike], duration: usize) -> Vec<IndexEntry> {
+pub fn wma(
+    entries: &[impl IndexEntryLike],
+    duration: usize,
+) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
     if duration == 0 || entries.len() < duration {
-        return vec![];
+        return Ok(vec![]);
     }
+    IndexEntry::validate_list(entries)?;
 
     let mut sorted = entries.to_owned();
     sorted.sort_by_key(|x| x.get_at());
 
-    (0..=(sorted.len() - duration))
+    Ok((0..=(sorted.len() - duration))
         .map(|i| sorted.iter().skip(i).take(duration))
         .map(|xs| {
             let at = xs.clone().last().unwrap().get_at();
@@ -41,5 +45,5 @@ pub fn wma(entries: &[impl IndexEntryLike], duration: usize) -> Vec<IndexEntry> 
                 value: value_sum / weights_sum,
             }
         })
-        .collect()
+        .collect())
 }
