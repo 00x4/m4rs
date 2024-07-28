@@ -55,7 +55,7 @@ pub fn macd(
     signal_duration: usize,
 ) -> Result<Vec<MacdEntry>, Box<dyn std::error::Error>> {
     if long_duration < short_duration {
-        return Err(Box::new(Error::ContainsContradictionInTwoDurations {
+        return Err(Box::new(Error::LongDurationIsNotGreaterThanShortDuration {
             short_duration,
             long_duration,
         }));

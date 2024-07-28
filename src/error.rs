@@ -1,10 +1,16 @@
 use std::fmt::Display;
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug)]
 pub enum Error {
-    ContainsNaN(u64),
-    ContainsInfinite(u64),
-    ContainsContradictionInTwoDurations {
+    ContainsNaN {
+        at: u64,
+        field: String,
+    },
+    ContainsInfinite {
+        at: u64,
+        field: String,
+    },
+    LongDurationIsNotGreaterThanShortDuration {
         short_duration: usize,
         long_duration: usize,
     },

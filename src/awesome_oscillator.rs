@@ -24,7 +24,7 @@ pub fn awesome_oscillator(
     long_duration: usize,
 ) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
     if short_duration > long_duration {
-        return Err(Box::new(Error::ContainsContradictionInTwoDurations {
+        return Err(Box::new(Error::LongDurationIsNotGreaterThanShortDuration {
             short_duration,
             long_duration,
         }));

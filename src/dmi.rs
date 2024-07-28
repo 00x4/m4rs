@@ -100,18 +100,18 @@ pub fn dmi(
             .map(|x| x.plus_dm())
             .collect::<Vec<IndexEntry>>(),
         duration,
-    );
+    )?;
     let minus_dm_ma = wilder_ma(
         &calcs
             .iter()
             .map(|x| x.minus_dm())
             .collect::<Vec<IndexEntry>>(),
         duration,
-    );
+    )?;
     let tr_ma = wilder_ma(
         &calcs.iter().map(|x| x.tr()).collect::<Vec<IndexEntry>>(),
         duration,
-    );
+    )?;
     let dmis = tr_ma.iter().filter_map(|tr| {
         match (
             plus_dm_ma.iter().find(|x| x.at == tr.at),
@@ -140,7 +140,7 @@ pub fn dmi(
             })
             .collect::<Vec<IndexEntry>>(),
         duration,
-    );
+    )?;
     Ok(dmis
         .filter_map(|dmi| {
             adxs.iter()
@@ -186,6 +186,9 @@ fn calc_dm(entries: &[Candlestick]) -> Vec<Calc> {
         .collect()
 }
 
-fn wilder_ma(entries: &[impl IndexEntryLike], duration: usize) -> Vec<IndexEntry> {
-    ema(entries, duration * 2 - 1).unwrap()
+fn wilder_ma(
+    entries: &[impl IndexEntryLike],
+    duration: usize,
+) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
+    ema(entries, duration * 2 - 1)
 }

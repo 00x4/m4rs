@@ -46,12 +46,22 @@ impl IndexEntry {
         }
     }
 
-    pub(crate) fn validate(at: u64, v: f64) -> Result<(), Box<dyn std::error::Error>> {
+    pub(crate) fn validate_field(
+        at: u64,
+        v: f64,
+        field: &str,
+    ) -> Result<(), Box<dyn std::error::Error>> {
         if v.is_nan() {
-            return Err(Box::new(Error::ContainsNaN(at)));
+            return Err(Box::new(Error::ContainsNaN {
+                at,
+                field: field.to_string(),
+            }));
         }
         if v.is_infinite() {
-            return Err(Box::new(Error::ContainsInfinite(at)));
+            return Err(Box::new(Error::ContainsInfinite {
+                at,
+                field: field.to_string(),
+            }));
         }
         Ok(())
     }
@@ -60,7 +70,7 @@ impl IndexEntry {
         xs: &[T],
     ) -> Result<(), Box<dyn std::error::Error>> {
         for x in xs {
-            Self::validate(x.get_at(), x.get_value())?;
+            Self::validate_field(x.get_at(), x.get_value(), "value")?;
         }
         Ok(())
     }
@@ -96,7 +106,13 @@ mod tests {
         assert!(res.is_err());
         let res = res.err().unwrap();
         let e = res.downcast_ref::<Error>();
-        assert!(matches!(e, Some(Error::ContainsNaN(1719400003))));
+        assert!(matches!(
+            e,
+            Some(Error::ContainsNaN {
+                at: 1719400003,
+                field: _
+            })
+        ));
 
         // invalid: contains INFINITY
         let res = IndexEntry::validate_list(&vec![
@@ -109,6 +125,12 @@ mod tests {
         assert!(res.is_err());
         let res = res.err().unwrap();
         let e = res.downcast_ref::<Error>();
-        assert!(matches!(e, Some(Error::ContainsInfinite(1719400004))));
+        assert!(matches!(
+            e,
+            Some(Error::ContainsInfinite {
+                at: 1719400004,
+                field: _
+            })
+        ));
     }
 }

@@ -50,11 +50,11 @@ impl Candlestick {
 
     pub(crate) fn validate_list(xs: &[Self]) -> Result<(), Box<dyn std::error::Error>> {
         for x in xs {
-            IndexEntry::validate(x.at, x.open)?;
-            IndexEntry::validate(x.at, x.high)?;
-            IndexEntry::validate(x.at, x.low)?;
-            IndexEntry::validate(x.at, x.close)?;
-            IndexEntry::validate(x.at, x.volume)?;
+            IndexEntry::validate_field(x.at, x.open, "open")?;
+            IndexEntry::validate_field(x.at, x.high, "high")?;
+            IndexEntry::validate_field(x.at, x.low, "low")?;
+            IndexEntry::validate_field(x.at, x.close, "close")?;
+            IndexEntry::validate_field(x.at, x.volume, "volume")?;
         }
         Ok(())
     }
@@ -235,7 +235,7 @@ mod tests {
         assert!(res.is_err());
         let res = res.err().unwrap();
         let e = res.downcast_ref::<Error>();
-        assert!(matches!(e, Some(Error::ContainsNaN(1719400003))));
+        assert!(matches!(e, Some(Error::ContainsNaN { at: 1719400003, field }) if field == "high"));
 
         // invalid: contains INFINITY
         let res = Candlestick::validate_list(&vec![
@@ -248,6 +248,9 @@ mod tests {
         assert!(res.is_err());
         let res = res.err().unwrap();
         let e = res.downcast_ref::<Error>();
-        assert!(matches!(e, Some(Error::ContainsInfinite(1719400004))));
+        assert!(matches!(
+            e,
+            Some(Error::ContainsInfinite { at: 1719400004, field }) if field == "volume"
+        ));
     }
 }
