@@ -12,7 +12,7 @@
 //! ];
 //!
 //! // Get 20SMA
-//! let ma = m4rs::sma(&candlesticks, 20);
+//! let ma = m4rs::sma(&candlesticks, 20).unwrap();
 //!
 //! // Get Envelope with 10% range
 //! let result = m4rs::envelope(&ma, 10.0);
@@ -20,7 +20,7 @@
 
 use std::fmt::Display;
 
-use crate::IndexEntryLike;
+use crate::{IndexEntry, IndexEntryLike};
 
 #[derive(Clone, Debug)]
 pub struct EnvelopeEntry {
@@ -51,8 +51,13 @@ impl IndexEntryLike for EnvelopeEntry {
 }
 
 /// Returns Envelope for given IndexEntry list
-pub fn envelope(entries: &[impl IndexEntryLike], percent: f32) -> Vec<EnvelopeEntry> {
-    entries
+pub fn envelope(
+    entries: &[impl IndexEntryLike],
+    percent: f32,
+) -> Result<Vec<EnvelopeEntry>, Box<dyn std::error::Error>> {
+    IndexEntry::validate_list(entries)?;
+
+    Ok(entries
         .iter()
         .map(|x| {
             let basis = x.get_value();
@@ -64,5 +69,5 @@ pub fn envelope(entries: &[impl IndexEntryLike], percent: f32) -> Vec<EnvelopeEn
                 lower: basis * (1.0 - pct),
             }
         })
-        .collect()
+        .collect())
 }

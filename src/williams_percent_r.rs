@@ -18,14 +18,19 @@
 use crate::{Candlestick, IndexEntry};
 
 /// Returns Williams %R for given Candlestick list
-pub fn williams_percent_r(entries: &[Candlestick], duration: usize) -> Vec<IndexEntry> {
+pub fn williams_percent_r(
+    entries: &[Candlestick],
+    duration: usize,
+) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
     if duration == 0 || entries.len() < duration {
-        return vec![];
+        return Ok(vec![]);
     }
+    Candlestick::validate_list(entries)?;
+
     let mut sorted = entries.to_owned();
     sorted.sort_by_key(|x| x.at);
 
-    (0..=sorted.len() - duration)
+    Ok((0..=sorted.len() - duration)
         .map(|i| {
             let xs = sorted.iter().skip(i).take(duration);
             let highest = xs.clone().map(|x| x.high).reduce(|z, x| z.max(x)).unwrap();
@@ -41,5 +46,5 @@ pub fn williams_percent_r(entries: &[Candlestick], duration: usize) -> Vec<Index
                 },
             }
         })
-        .collect()
+        .collect())
 }

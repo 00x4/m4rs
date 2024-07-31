@@ -18,17 +18,21 @@
 use crate::{wma, IndexEntry, IndexEntryLike};
 
 /// Returns HMA (Hull Moving Average) for given IndexEntry list
-pub fn hma(entries: &[impl IndexEntryLike], duration: usize) -> Vec<IndexEntry> {
+pub fn hma(
+    entries: &[impl IndexEntryLike],
+    duration: usize,
+) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
     if duration == 0 || entries.len() < duration {
-        return vec![];
+        return Ok(vec![]);
     }
+    IndexEntry::validate_list(entries)?;
 
     let mut sorted = entries.to_owned();
     sorted.sort_by_key(|x| x.get_at());
     let d = duration as f32;
 
-    let wma_half = wma(&sorted, (d / 2.0) as usize);
-    let raw: Vec<IndexEntry> = wma(&sorted, duration)
+    let wma_half = wma(&sorted, (d / 2.0) as usize)?;
+    let raw: Vec<IndexEntry> = wma(&sorted, duration)?
         .iter()
         .filter_map(|f| {
             wma_half.iter().find(|h| h.at == f.at).map(|h| IndexEntry {

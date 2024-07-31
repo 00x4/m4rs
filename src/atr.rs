@@ -20,12 +20,18 @@ use super::Candlestick;
 use super::IndexEntry;
 
 /// Returns ATR (Average True Range) for given Candlestick list
-pub fn atr(entries: &[Candlestick], duration: usize) -> Vec<IndexEntry> {
+pub fn atr(
+    entries: &[Candlestick],
+    duration: usize,
+) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
     if duration == 0 || entries.len() < duration {
-        return vec![];
+        return Ok(vec![]);
     }
+    Candlestick::validate_list(entries)?;
+
     let mut sorted = entries.to_owned();
     sorted.sort_by(|a, b| a.at.cmp(&b.at));
+
     let mut tr: Vec<IndexEntry> = vec![];
     for (i, x) in sorted.iter().enumerate() {
         if i == 0 {

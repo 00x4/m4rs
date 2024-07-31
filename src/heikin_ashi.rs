@@ -17,10 +17,15 @@
 
 use crate::Candlestick;
 
-pub fn heikin_ashi(entries: &[Candlestick]) -> Vec<Candlestick> {
+pub fn heikin_ashi(
+    entries: &[Candlestick],
+) -> Result<Vec<Candlestick>, Box<dyn std::error::Error>> {
+    Candlestick::validate_list(entries)?;
+
     let mut sorted = entries.to_owned();
     sorted.sort_by(|a, b| a.at.cmp(&b.at));
-    sorted.iter().fold(vec![], |z, x| {
+
+    Ok(sorted.iter().fold(vec![], |z, x| {
         if z.is_empty() {
             return vec![x.clone()];
         }
@@ -37,5 +42,5 @@ pub fn heikin_ashi(entries: &[Candlestick]) -> Vec<Candlestick> {
             }],
         ]
         .concat()
-    })
+    }))
 }

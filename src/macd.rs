@@ -17,8 +17,7 @@
 
 use std::fmt::Display;
 
-use super::ema;
-use super::IndexEntryLike;
+use crate::{ema, Error, IndexEntryLike};
 
 #[derive(Debug, Clone)]
 pub struct MacdEntry {
@@ -51,15 +50,21 @@ impl IndexEntryLike for MacdEntry {
 /// Returns MACD for given IndexEntry list
 pub fn macd(
     entries: &[impl IndexEntryLike],
-    short: usize,
-    long: usize,
-    signal: usize,
-) -> Vec<MacdEntry> {
-    if short == 0 || long == 0 || signal == 0 {
-        return vec![];
+    short_duration: usize,
+    long_duration: usize,
+    signal_duration: usize,
+) -> Result<Vec<MacdEntry>, Box<dyn std::error::Error>> {
+    if long_duration < short_duration {
+        return Err(Box::new(Error::LongDurationIsNotGreaterThanShortDuration {
+            short_duration,
+            long_duration,
+        }));
     }
-    let ema_s = ema(entries, short);
-    let ema_l = ema(entries, long);
+    if entries.is_empty() || short_duration == 0 || long_duration == 0 || signal_duration == 0 {
+        return Ok(vec![]);
+    }
+    let ema_s = ema(entries, short_duration)?;
+    let ema_l = ema(entries, long_duration)?;
     let macds: Vec<MacdEntry> = ema_l
         .iter()
         .filter_map(|l| {
@@ -71,8 +76,8 @@ pub fn macd(
             })
         })
         .collect();
-    let signals = ema(&macds, signal);
-    macds
+    let signals = ema(&macds, signal_duration)?;
+    Ok(macds
         .iter()
         .filter_map(|x| {
             signals
@@ -85,5 +90,5 @@ pub fn macd(
                     histogram: x.macd - signal.value,
                 })
         })
-        .collect()
+        .collect())
 }

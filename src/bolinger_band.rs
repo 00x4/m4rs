@@ -17,7 +17,7 @@
 
 use std::fmt::Display;
 
-use super::IndexEntryLike;
+use crate::{IndexEntry, IndexEntryLike};
 
 #[derive(Clone, Debug)]
 pub struct BollingerBandEntry {
@@ -81,13 +81,19 @@ impl IndexEntryLike for BollingerBandEntry {
 }
 
 /// Returns Bolinger Band for given Candlestick list
-pub fn bolinger_band(entries: &[impl IndexEntryLike], duration: usize) -> Vec<BollingerBandEntry> {
+pub fn bolinger_band(
+    entries: &[impl IndexEntryLike],
+    duration: usize,
+) -> Result<Vec<BollingerBandEntry>, Box<dyn std::error::Error>> {
     if duration == 0 || entries.len() < duration {
-        return vec![];
+        return Ok(vec![]);
     }
+    IndexEntry::validate_list(entries)?;
+
     let mut sorted = entries.to_owned();
     sorted.sort_by_key(|x| x.get_at());
-    (0..sorted.len() - duration + 1)
+
+    Ok((0..sorted.len() - duration + 1)
         .map(|i| {
             let xs = sorted.iter().skip(i).take(duration);
             let d = duration as f64;
@@ -102,5 +108,5 @@ pub fn bolinger_band(entries: &[impl IndexEntryLike], duration: usize) -> Vec<Bo
                 sigma,
             }
         })
-        .collect()
+        .collect())
 }

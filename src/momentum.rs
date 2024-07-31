@@ -18,13 +18,19 @@
 use super::{IndexEntry, IndexEntryLike};
 
 /// Returns Momentum for given IndexEntry list
-pub fn momentum(entries: &[impl IndexEntryLike], duration: usize) -> Vec<IndexEntry> {
+pub fn momentum(
+    entries: &[impl IndexEntryLike],
+    duration: usize,
+) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
     if duration == 0 || entries.len() < duration {
-        return vec![];
+        return Ok(vec![]);
     }
+    IndexEntry::validate_list(entries)?;
+
     let mut sorted = entries.to_owned();
     sorted.sort_by_key(|x| x.get_at());
-    (0..(sorted.len() - duration))
+
+    Ok((0..(sorted.len() - duration))
         .map(|i| sorted.iter().skip(i).take(duration + 1))
         .map(|mut xs| {
             let head = xs.next().unwrap();
@@ -34,5 +40,5 @@ pub fn momentum(entries: &[impl IndexEntryLike], duration: usize) -> Vec<IndexEn
                 value: last.get_value() - head.get_value(),
             }
         })
-        .collect()
+        .collect())
 }

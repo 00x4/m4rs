@@ -26,26 +26,32 @@ struct Calc {
 }
 
 /// Returns RSI for given IndexEntry list
-pub fn rsi<T: IndexEntryLike>(entries: &[T], duration: usize) -> Vec<IndexEntry> {
+pub fn rsi<T: IndexEntryLike>(
+    entries: &[T],
+    duration: usize,
+) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
     if duration == 0 || entries.len() < duration {
-        return vec![];
+        return Ok(vec![]);
     }
+    IndexEntry::validate_list(entries)?;
+
     let mut sorted = entries.to_owned();
     sorted.sort_by_key(|x| x.get_at());
 
     let first_rsi = calc_first_rsi(&sorted, duration);
     if first_rsi.is_none() {
-        return vec![];
+        return Ok(vec![]);
     }
     let first_rsi = first_rsi.unwrap();
     let xs: Vec<&T> = sorted.iter().skip(duration + 1).collect();
     if xs.is_empty() {
-        return vec![IndexEntry {
+        return Ok(vec![IndexEntry {
             at: first_rsi.0,
             value: first_rsi.1.result,
-        }];
+        }]);
     }
-    xs.iter()
+    Ok(xs
+        .iter()
         .scan(first_rsi, |z, x| {
             let upside = (z.1.upside * ((duration - 1) as f64)
                 + (x.get_value() - z.1.prev.value).max(0.0))
@@ -66,7 +72,7 @@ pub fn rsi<T: IndexEntryLike>(entries: &[T], duration: usize) -> Vec<IndexEntry>
             at,
             value: calc.result,
         })
-        .collect()
+        .collect())
 }
 
 fn calc_first_rsi<T: IndexEntryLike>(entries: &[T], duration: usize) -> Option<(u64, Calc)> {
