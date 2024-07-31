@@ -84,6 +84,28 @@ mod tests {
     use crate::Error;
 
     #[test]
+    fn test_validate_field() {
+        let res = IndexEntry::validate_field(1719400001, 100.0, "field1");
+        assert!(res.is_ok());
+
+        let res = IndexEntry::validate_field(1719400001, NAN, "field1");
+        assert!(res.is_err());
+        let res = res.err().unwrap();
+        let e = res.downcast_ref::<Error>();
+        assert!(
+            matches!(e, Some(Error::ContainsNaN { at: 1719400001, field }) if field == "field1")
+        );
+
+        let res = IndexEntry::validate_field(1719400002, INFINITY, "field2");
+        assert!(res.is_err());
+        let res = res.err().unwrap();
+        let e = res.downcast_ref::<Error>();
+        assert!(
+            matches!(e, Some(Error::ContainsInfinite { at: 1719400002, field }) if field == "field2")
+        );
+    }
+
+    #[test]
     fn test_validate_list() {
         // valid list
         let res = IndexEntry::validate_list(&vec![
