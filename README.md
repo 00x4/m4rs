@@ -18,6 +18,7 @@
     - Ichimoku Kinko Hyo
     - MACD
     - Momentum
+    - Parabolic SAR
     - RCI
     - RMA
     - RSI

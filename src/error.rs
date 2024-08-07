@@ -14,6 +14,10 @@ pub enum Error {
         short_duration: usize,
         long_duration: usize,
     },
+    MustBePositiveF32 {
+        value: f32,
+        field: String,
+    },
 }
 
 impl Display for Error {
