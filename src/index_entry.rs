@@ -46,29 +46,23 @@ impl IndexEntry {
         }
     }
 
-    pub(crate) fn validate_field(
-        at: u64,
-        v: f64,
-        field: &str,
-    ) -> Result<(), Box<dyn std::error::Error>> {
+    pub(crate) fn validate_field(at: u64, v: f64, field: &str) -> Result<(), Error> {
         if v.is_nan() {
-            return Err(Box::new(Error::ContainsNaN {
+            return Err(Error::ContainsNaN {
                 at,
                 field: field.to_string(),
-            }));
+            });
         }
         if v.is_infinite() {
-            return Err(Box::new(Error::ContainsInfinite {
+            return Err(Error::ContainsInfinite {
                 at,
                 field: field.to_string(),
-            }));
+            });
         }
         Ok(())
     }
 
-    pub(crate) fn validate_list<T: IndexEntryLike>(
-        xs: &[T],
-    ) -> Result<(), Box<dyn std::error::Error>> {
+    pub(crate) fn validate_list<T: IndexEntryLike>(xs: &[T]) -> Result<(), Error> {
         for x in xs {
             Self::validate_field(x.get_at(), x.get_value(), "value")?;
         }
@@ -90,18 +84,14 @@ mod tests {
 
         let res = IndexEntry::validate_field(1719400001, NAN, "field1");
         assert!(res.is_err());
-        let res = res.err().unwrap();
-        let e = res.downcast_ref::<Error>();
-        assert!(
-            matches!(e, Some(Error::ContainsNaN { at: 1719400001, field }) if field == "field1")
-        );
+        let e = res.err().unwrap();
+        assert!(matches!(e, Error::ContainsNaN { at: 1719400001, field } if field == "field1"));
 
         let res = IndexEntry::validate_field(1719400002, INFINITY, "field2");
         assert!(res.is_err());
-        let res = res.err().unwrap();
-        let e = res.downcast_ref::<Error>();
+        let e = res.err().unwrap();
         assert!(
-            matches!(e, Some(Error::ContainsInfinite { at: 1719400002, field }) if field == "field2")
+            matches!(e, Error::ContainsInfinite { at: 1719400002, field } if field == "field2")
         );
     }
 
@@ -126,14 +116,13 @@ mod tests {
             IndexEntry::new(1719400005, 90.0),
         ]);
         assert!(res.is_err());
-        let res = res.err().unwrap();
-        let e = res.downcast_ref::<Error>();
+        let e = res.err().unwrap();
         assert!(matches!(
             e,
-            Some(Error::ContainsNaN {
+            Error::ContainsNaN {
                 at: 1719400003,
                 field: _
-            })
+            }
         ));
 
         // invalid: contains INFINITY
@@ -145,14 +134,13 @@ mod tests {
             IndexEntry::new(1719400005, 90.0),
         ]);
         assert!(res.is_err());
-        let res = res.err().unwrap();
-        let e = res.downcast_ref::<Error>();
+        let e = res.err().unwrap();
         assert!(matches!(
             e,
-            Some(Error::ContainsInfinite {
+            Error::ContainsInfinite {
                 at: 1719400004,
                 field: _
-            })
+            }
         ));
     }
 }
