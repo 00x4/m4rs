@@ -20,7 +20,7 @@
 
 use std::fmt::Display;
 
-use crate::{IndexEntry, IndexEntryLike};
+use crate::{Error, IndexEntry, IndexEntryLike};
 
 #[derive(Clone, Debug)]
 pub struct EnvelopeEntry {
@@ -54,7 +54,7 @@ impl IndexEntryLike for EnvelopeEntry {
 pub fn envelope(
     entries: &[impl IndexEntryLike],
     percent: f32,
-) -> Result<Vec<EnvelopeEntry>, Box<dyn std::error::Error>> {
+) -> Result<Vec<EnvelopeEntry>, Error> {
     IndexEntry::validate_list(entries)?;
 
     Ok(entries
