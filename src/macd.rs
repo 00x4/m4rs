@@ -53,12 +53,12 @@ pub fn macd(
     short_duration: usize,
     long_duration: usize,
     signal_duration: usize,
-) -> Result<Vec<MacdEntry>, Box<dyn std::error::Error>> {
+) -> Result<Vec<MacdEntry>, Error> {
     if long_duration < short_duration {
-        return Err(Box::new(Error::LongDurationIsNotGreaterThanShortDuration {
+        return Err(Error::LongDurationIsNotGreaterThanShortDuration {
             short_duration,
             long_duration,
-        }));
+        });
     }
     if entries.is_empty() || short_duration == 0 || long_duration == 0 || signal_duration == 0 {
         return Ok(vec![]);
