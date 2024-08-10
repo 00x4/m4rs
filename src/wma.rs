@@ -15,13 +15,12 @@
 //! let result = m4rs::wma(&candlesticks, 20);
 //! ```
 
+use crate::Error;
+
 use super::{IndexEntry, IndexEntryLike};
 
 /// Returns WMA (Weighted Moving Average) for given IndexEntry list
-pub fn wma(
-    entries: &[impl IndexEntryLike],
-    duration: usize,
-) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
+pub fn wma(entries: &[impl IndexEntryLike], duration: usize) -> Result<Vec<IndexEntry>, Error> {
     if duration == 0 || entries.len() < duration {
         return Ok(vec![]);
     }
