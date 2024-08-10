@@ -17,7 +17,7 @@
 
 use std::fmt::Display;
 
-use crate::{IndexEntry, IndexEntryLike};
+use crate::{Error, IndexEntry, IndexEntryLike};
 
 #[derive(Clone, Debug)]
 pub struct BollingerBandEntry {
@@ -84,7 +84,7 @@ impl IndexEntryLike for BollingerBandEntry {
 pub fn bolinger_band(
     entries: &[impl IndexEntryLike],
     duration: usize,
-) -> Result<Vec<BollingerBandEntry>, Box<dyn std::error::Error>> {
+) -> Result<Vec<BollingerBandEntry>, Error> {
     if duration == 0 || entries.len() < duration {
         return Ok(vec![]);
     }
