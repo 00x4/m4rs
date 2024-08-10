@@ -17,7 +17,7 @@
 
 use std::fmt::Display;
 
-use crate::{ema, Candlestick, IndexEntry, IndexEntryLike};
+use crate::{ema, Candlestick, Error, IndexEntry, IndexEntryLike};
 
 #[derive(Clone, Debug)]
 pub struct DmiEntry {
@@ -81,10 +81,7 @@ impl Calc {
 }
 
 /// Returns DMI/ADX for given IndexEntry list
-pub fn dmi(
-    entries: &[Candlestick],
-    duration: usize,
-) -> Result<Vec<DmiEntry>, Box<dyn std::error::Error>> {
+pub fn dmi(entries: &[Candlestick], duration: usize) -> Result<Vec<DmiEntry>, Error> {
     if duration == 0 || entries.len() < duration {
         return Ok(vec![]);
     }
@@ -186,9 +183,6 @@ fn calc_dm(entries: &[Candlestick]) -> Vec<Calc> {
         .collect()
 }
 
-fn wilder_ma(
-    entries: &[impl IndexEntryLike],
-    duration: usize,
-) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
+fn wilder_ma(entries: &[impl IndexEntryLike], duration: usize) -> Result<Vec<IndexEntry>, Error> {
     ema(entries, duration * 2 - 1)
 }
