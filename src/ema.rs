@@ -15,13 +15,10 @@
 //! let result = m4rs::ema(&candlesticks, 20);
 //! ```
 
-use super::{IndexEntry, IndexEntryLike};
+use crate::{Error, IndexEntry, IndexEntryLike};
 
 /// Returns EMA (Exponential Moving Average) for given IndexEntry list
-pub fn ema(
-    entries: &[impl IndexEntryLike],
-    duration: usize,
-) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
+pub fn ema(entries: &[impl IndexEntryLike], duration: usize) -> Result<Vec<IndexEntry>, Error> {
     ema_with_alpha(entries, duration, 2.0 / ((duration as f64) + 1.0))
 }
 
@@ -29,7 +26,7 @@ pub(crate) fn ema_with_alpha<T: IndexEntryLike>(
     entries: &[T],
     duration: usize,
     alpha: f64,
-) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
+) -> Result<Vec<IndexEntry>, Error> {
     if duration == 0 || entries.len() < duration {
         return Ok(vec![]);
     }
