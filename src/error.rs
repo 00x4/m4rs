@@ -18,6 +18,10 @@ pub enum Error {
         value: f32,
         field: String,
     },
+    DividedByZero {
+        at: u64,
+        field: String,
+    },
 }
 
 impl Display for Error {

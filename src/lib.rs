@@ -19,6 +19,7 @@ pub mod rma;
 pub mod rsi;
 pub mod sma;
 pub mod stochastics;
+pub mod vwma;
 pub mod williams_percent_r;
 pub mod wma;
 
@@ -43,5 +44,6 @@ pub use rma::*;
 pub use rsi::*;
 pub use sma::*;
 pub use stochastics::*;
+pub use vwma::*;
 pub use williams_percent_r::*;
 pub use wma::*;

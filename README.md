@@ -24,6 +24,7 @@
     - RSI
     - SMA
     - Stochastics (Fast, Slow)
+    - VWMA
     - Williams %R
     - WMA
 - Call it "Mars"
