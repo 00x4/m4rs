@@ -72,7 +72,7 @@ impl IndexEntry {
 
 #[cfg(test)]
 mod tests {
-    use std::f64::{INFINITY, NAN};
+    use std::f64::{INFINITY, NAN, NEG_INFINITY};
 
     use super::*;
     use crate::Error;
@@ -83,15 +83,18 @@ mod tests {
         assert!(res.is_ok());
 
         let res = IndexEntry::validate_field(1719400001, NAN, "field1");
-        assert!(res.is_err());
-        let e = res.err().unwrap();
-        assert!(matches!(e, Error::ContainsNaN { at: 1719400001, field } if field == "field1"));
+        assert!(
+            matches!(res, Err(Error::ContainsNaN { at: 1719400001, field }) if field == "field1")
+        );
 
         let res = IndexEntry::validate_field(1719400002, INFINITY, "field2");
-        assert!(res.is_err());
-        let e = res.err().unwrap();
         assert!(
-            matches!(e, Error::ContainsInfinite { at: 1719400002, field } if field == "field2")
+            matches!(res, Err(Error::ContainsInfinite { at: 1719400002, field }) if field == "field2")
+        );
+
+        let res = IndexEntry::validate_field(1719400003, NEG_INFINITY, "field3");
+        assert!(
+            matches!(res, Err(Error::ContainsInfinite { at: 1719400003, field }) if field == "field3")
         );
     }
 
@@ -115,15 +118,9 @@ mod tests {
             IndexEntry::new(1719400004, 120.0),
             IndexEntry::new(1719400005, 90.0),
         ]);
-        assert!(res.is_err());
-        let e = res.err().unwrap();
-        assert!(matches!(
-            e,
-            Error::ContainsNaN {
-                at: 1719400003,
-                field: _
-            }
-        ));
+        assert!(
+            matches!(res, Err(Error::ContainsNaN { at: 1719400003, field }) if field == "value")
+        );
 
         // invalid: contains INFINITY
         let res = IndexEntry::validate_list(&vec![
@@ -133,14 +130,8 @@ mod tests {
             IndexEntry::new(1719400004, INFINITY),
             IndexEntry::new(1719400005, 90.0),
         ]);
-        assert!(res.is_err());
-        let e = res.err().unwrap();
-        assert!(matches!(
-            e,
-            Error::ContainsInfinite {
-                at: 1719400004,
-                field: _
-            }
-        ));
+        assert!(
+            matches!(res, Err(Error::ContainsInfinite { at: 1719400004, field }) if field == "value")
+        );
     }
 }

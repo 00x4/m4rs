@@ -232,9 +232,9 @@ mod tests {
             Candlestick::new(1719400004, 120.0, 130.0, 80.0, 95.0, 1000.0),
             Candlestick::new(1719400005, 90.0, 100.0, 70.0, 82.0, 1000.0),
         ]);
-        assert!(res.is_err());
-        let e = res.err().unwrap();
-        assert!(matches!(e, Error::ContainsNaN { at: 1719400003, field } if field == "high"));
+        assert!(
+            matches!(res, Err(Error::ContainsNaN { at: 1719400003, field }) if field == "high")
+        );
 
         // invalid: contains INFINITY
         let res = Candlestick::validate_list(&vec![
@@ -244,11 +244,8 @@ mod tests {
             Candlestick::new(1719400004, 120.0, 130.0, 80.0, 95.0, INFINITY),
             Candlestick::new(1719400005, 90.0, 100.0, 70.0, 82.0, 1000.0),
         ]);
-        assert!(res.is_err());
-        let e = res.err().unwrap();
-        assert!(matches!(
-            e,
-            Error::ContainsInfinite { at: 1719400004, field } if field == "volume"
-        ));
+        assert!(
+            matches!(res, Err(Error::ContainsInfinite { at: 1719400004, field }) if field == "volume")
+        );
     }
 }
