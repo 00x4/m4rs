@@ -22,12 +22,12 @@ pub fn awesome_oscillator(
     entries: &[Candlestick],
     short_duration: usize,
     long_duration: usize,
-) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
+) -> Result<Vec<IndexEntry>, Error> {
     if short_duration > long_duration {
-        return Err(Box::new(Error::LongDurationIsNotGreaterThanShortDuration {
+        return Err(Error::LongDurationIsNotGreaterThanShortDuration {
             short_duration,
             long_duration,
-        }));
+        });
     }
     if short_duration == 0
         || long_duration == 0
