@@ -15,7 +15,7 @@
 //! let result = m4rs::rsi(&candlesticks, 14);
 //! ```
 
-use super::{IndexEntry, IndexEntryLike};
+use crate::{Error, IndexEntry, IndexEntryLike};
 
 #[derive(Clone)]
 struct Calc {
@@ -26,10 +26,7 @@ struct Calc {
 }
 
 /// Returns RSI for given IndexEntry list
-pub fn rsi<T: IndexEntryLike>(
-    entries: &[T],
-    duration: usize,
-) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
+pub fn rsi<T: IndexEntryLike>(entries: &[T], duration: usize) -> Result<Vec<IndexEntry>, Error> {
     if duration == 0 || entries.len() < duration {
         return Ok(vec![]);
     }
