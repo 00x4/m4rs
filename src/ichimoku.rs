@@ -15,9 +15,7 @@
 //! let result = m4rs::ichimoku_default(&candlesticks);
 //! ```
 
-use super::Candlestick;
-use super::IndexEntry;
-use super::IndexEntryLike;
+use crate::{Candlestick, Error, IndexEntry, IndexEntryLike};
 
 #[derive(Debug)]
 pub struct IchimokuEntry {
@@ -85,9 +83,7 @@ impl IchimokuData {
 }
 
 /// Returns Ichimoku Kinkohyo for given Candlestick list with default parameters
-pub fn ichimoku_default(
-    entries: &[Candlestick],
-) -> Result<IchimokuData, Box<dyn std::error::Error>> {
+pub fn ichimoku_default(entries: &[Candlestick]) -> Result<IchimokuData, Error> {
     ichimoku(entries, 9, 26, 52, 26)
 }
 
@@ -98,7 +94,7 @@ pub fn ichimoku(
     base_line_len: usize,
     leading_span_b_len: usize,
     lagging_span: usize,
-) -> Result<IchimokuData, Box<dyn std::error::Error>> {
+) -> Result<IchimokuData, Error> {
     Candlestick::validate_list(entries)?;
 
     let base_line = calc_base_and_conversion_line(entries, base_line_len);

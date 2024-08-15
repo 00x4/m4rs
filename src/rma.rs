@@ -15,14 +15,9 @@
 //! let result = m4rs::rma(&candlesticks, 20);
 //! ```
 
-use super::ema_with_alpha;
-use super::IndexEntry;
-use super::IndexEntryLike;
+use crate::{ema_with_alpha, Error, IndexEntry, IndexEntryLike};
 
 /// Returns RMA (Running Moving Average) for given IndexEntry list
-pub fn rma(
-    entries: &[impl IndexEntryLike],
-    duration: usize,
-) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
+pub fn rma(entries: &[impl IndexEntryLike], duration: usize) -> Result<Vec<IndexEntry>, Error> {
     ema_with_alpha(entries, duration, 1.0 / (duration as f64))
 }

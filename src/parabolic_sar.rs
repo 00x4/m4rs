@@ -23,7 +23,7 @@ pub fn parabolic_sar(
     af_init: f32,
     af_step: f32,
     af_max: f32,
-) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
+) -> Result<Vec<IndexEntry>, Error> {
     let af_init = validate_arg(af_init, "af_init")?;
     let af_step = validate_arg(af_step, "af_step")?;
     let af_max = validate_arg(af_max, "af_max")?;
@@ -76,12 +76,12 @@ pub fn parabolic_sar(
     Ok(r)
 }
 
-fn validate_arg(value: f32, field: &str) -> Result<f64, Box<dyn std::error::Error>> {
+fn validate_arg(value: f32, field: &str) -> Result<f64, Error> {
     if value < 0.0 {
-        return Err(Box::new(Error::MustBePositiveF32 {
+        return Err(Error::MustBePositiveF32 {
             value,
             field: field.to_string(),
-        }));
+        });
     }
     Ok(value as f64)
 }

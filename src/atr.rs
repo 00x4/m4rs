@@ -15,15 +15,10 @@
 //! let result = m4rs::atr(&candlesticks, 14);
 //! ```
 
-use super::rma;
-use super::Candlestick;
-use super::IndexEntry;
+use crate::{rma, Candlestick, Error, IndexEntry};
 
 /// Returns ATR (Average True Range) for given Candlestick list
-pub fn atr(
-    entries: &[Candlestick],
-    duration: usize,
-) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
+pub fn atr(entries: &[Candlestick], duration: usize) -> Result<Vec<IndexEntry>, Error> {
     if duration == 0 || entries.len() < duration {
         return Ok(vec![]);
     }

@@ -20,9 +20,7 @@
 
 use std::fmt::Display;
 
-use crate::{sma, Candlestick, IndexEntry};
-
-use super::IndexEntryLike;
+use crate::{sma, Candlestick, Error, IndexEntry, IndexEntryLike};
 
 #[derive(Clone, Debug)]
 pub struct StochasticsEntry {
@@ -105,7 +103,7 @@ pub fn stochastics(
     entries: &[Candlestick],
     duration_k: usize,
     duration_d: usize,
-) -> Result<Vec<StochasticsEntry>, Box<dyn std::error::Error>> {
+) -> Result<Vec<StochasticsEntry>, Error> {
     if duration_k == 0 || duration_d == 0 || entries.len() < duration_k {
         return Ok(vec![]);
     }
@@ -131,7 +129,7 @@ pub fn slow_stochastics(
     duration_k: usize,
     duration_d: usize,
     duration_sd: usize,
-) -> Result<Vec<SlowStochasticsEntry>, Box<dyn std::error::Error>> {
+) -> Result<Vec<SlowStochasticsEntry>, Error> {
     if duration_k == 0 || duration_d == 0 || duration_sd == 0 || entries.len() < duration_k {
         return Ok(vec![]);
     }

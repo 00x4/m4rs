@@ -15,17 +15,10 @@
 //! let result = m4rs::cci(&candlesticks, 14);
 //! ```
 
-use crate::sma;
-use crate::IndexEntryLike;
-
-use super::Candlestick;
-use super::IndexEntry;
+use crate::{sma, Candlestick, Error, IndexEntry, IndexEntryLike};
 
 /// Returns CCI for given Candlestick list
-pub fn cci(
-    entries: &[Candlestick],
-    duration: usize,
-) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
+pub fn cci(entries: &[Candlestick], duration: usize) -> Result<Vec<IndexEntry>, Error> {
     if duration == 0 || entries.len() < duration {
         return Ok(vec![]);
     }

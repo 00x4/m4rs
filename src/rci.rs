@@ -17,13 +17,10 @@
 
 use std::cmp::Ordering;
 
-use crate::{IndexEntry, IndexEntryLike};
+use crate::{Error, IndexEntry, IndexEntryLike};
 
 /// Returns RCI for given IndexEntry list
-pub fn rci(
-    entries: &[impl IndexEntryLike],
-    duration: usize,
-) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
+pub fn rci(entries: &[impl IndexEntryLike], duration: usize) -> Result<Vec<IndexEntry>, Error> {
     if duration == 0 || entries.len() < duration {
         return Ok(vec![]);
     }

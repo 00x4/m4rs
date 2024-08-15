@@ -15,13 +15,13 @@
 //! let result = m4rs::momentum(&candlesticks, 10);
 //! ```
 
-use super::{IndexEntry, IndexEntryLike};
+use crate::{Error, IndexEntry, IndexEntryLike};
 
 /// Returns Momentum for given IndexEntry list
 pub fn momentum(
     entries: &[impl IndexEntryLike],
     duration: usize,
-) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
+) -> Result<Vec<IndexEntry>, Error> {
     if duration == 0 || entries.len() < duration {
         return Ok(vec![]);
     }

@@ -15,11 +15,9 @@
 //! let result = m4rs::heikin_ashi(&candlesticks);
 //! ```
 
-use crate::Candlestick;
+use crate::{Candlestick, Error};
 
-pub fn heikin_ashi(
-    entries: &[Candlestick],
-) -> Result<Vec<Candlestick>, Box<dyn std::error::Error>> {
+pub fn heikin_ashi(entries: &[Candlestick]) -> Result<Vec<Candlestick>, Error> {
     Candlestick::validate_list(entries)?;
 
     let mut sorted = entries.to_owned();

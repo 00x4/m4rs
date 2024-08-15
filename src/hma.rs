@@ -15,13 +15,10 @@
 //! let result = m4rs::hma(&candlesticks, 20);
 //! ```
 
-use crate::{wma, IndexEntry, IndexEntryLike};
+use crate::{wma, Error, IndexEntry, IndexEntryLike};
 
 /// Returns HMA (Hull Moving Average) for given IndexEntry list
-pub fn hma(
-    entries: &[impl IndexEntryLike],
-    duration: usize,
-) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
+pub fn hma(entries: &[impl IndexEntryLike], duration: usize) -> Result<Vec<IndexEntry>, Error> {
     if duration == 0 || entries.len() < duration {
         return Ok(vec![]);
     }

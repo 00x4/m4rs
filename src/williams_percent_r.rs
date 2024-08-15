@@ -15,13 +15,13 @@
 //! let result = m4rs::williams_percent_r(&candlesticks, 14);
 //! ```
 
-use crate::{Candlestick, IndexEntry};
+use crate::{Candlestick, Error, IndexEntry};
 
 /// Returns Williams %R for given Candlestick list
 pub fn williams_percent_r(
     entries: &[Candlestick],
     duration: usize,
-) -> Result<Vec<IndexEntry>, Box<dyn std::error::Error>> {
+) -> Result<Vec<IndexEntry>, Error> {
     if duration == 0 || entries.len() < duration {
         return Ok(vec![]);
     }
