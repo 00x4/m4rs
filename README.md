@@ -23,6 +23,7 @@
     - RMA
     - RSI
     - SMA
+    - Standard Deviation
     - Stochastics (Fast, Slow)
     - VWMA
     - Williams %R
