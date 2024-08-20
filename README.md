@@ -26,6 +26,7 @@
     - SMA
     - Standard Deviation
     - Stochastics (Fast, Slow)
+    - TEMA
     - VWMA
     - Williams %R
     - WMA
