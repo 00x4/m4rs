@@ -10,6 +10,7 @@
     - Awesome Oscillator
     - Bolinger Band
     - CCI
+    - DEMA
     - DMI/ADX
     - EMA
     - Envelope
