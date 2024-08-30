@@ -23,6 +23,7 @@ pub mod standard_deviation;
 pub mod stochastics;
 pub mod tema;
 pub mod vwma;
+pub mod williams_fractals;
 pub mod williams_percent_r;
 pub mod wma;
 
@@ -51,5 +52,6 @@ pub use standard_deviation::*;
 pub use stochastics::*;
 pub use tema::*;
 pub use vwma::*;
+pub use williams_fractals::*;
 pub use williams_percent_r::*;
 pub use wma::*;

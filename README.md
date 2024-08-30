@@ -28,6 +28,7 @@
     - Stochastics (Fast, Slow)
     - TEMA
     - VWMA
+    - Williams Fractals
     - Williams %R
     - WMA
 - Call it "Mars"
