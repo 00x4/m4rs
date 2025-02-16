@@ -24,6 +24,7 @@
     - RMA
     - RSI
     - SMA
+    - SMMA
     - Standard Deviation
     - Stochastics (Fast, Slow)
     - TEMA
