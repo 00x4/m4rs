@@ -15,7 +15,7 @@
 //! let result = m4rs::atr(&candlesticks, 14);
 //! ```
 
-use crate::{rma, Candlestick, Error, IndexEntry};
+use crate::{Candlestick, Error, IndexEntry, rma};
 
 /// Returns ATR (Average True Range) for given Candlestick list
 pub fn atr(entries: &[Candlestick], duration: usize) -> Result<Vec<IndexEntry>, Error> {

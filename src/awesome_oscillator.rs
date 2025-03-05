@@ -15,7 +15,7 @@
 //! let result = m4rs::awesome_oscillator(&candlesticks, 5, 34);
 //! ```
 
-use crate::{sma, Candlestick, Error, IndexEntry};
+use crate::{Candlestick, Error, IndexEntry, sma};
 
 /// Returns Awesome Oscillator for given Candlestick list
 pub fn awesome_oscillator(

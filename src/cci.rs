@@ -15,7 +15,7 @@
 //! let result = m4rs::cci(&candlesticks, 14);
 //! ```
 
-use crate::{sma, Candlestick, Error, IndexEntry, IndexEntryLike};
+use crate::{Candlestick, Error, IndexEntry, IndexEntryLike, sma};
 
 /// Returns CCI for given Candlestick list
 pub fn cci(entries: &[Candlestick], duration: usize) -> Result<Vec<IndexEntry>, Error> {

@@ -15,7 +15,7 @@
 //! let result = m4rs::tema(&candlesticks, 9);
 //! ```
 
-use crate::{ema, Error, IndexEntry, IndexEntryLike};
+use crate::{Error, IndexEntry, IndexEntryLike, ema};
 
 /// Returns TEMA (Triple Exponential Moving Average) for given IndexEntry list
 pub fn tema(entries: &[impl IndexEntryLike], duration: usize) -> Result<Vec<IndexEntry>, Error> {
