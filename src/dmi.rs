@@ -17,7 +17,7 @@
 
 use std::fmt::Display;
 
-use crate::{ema, Candlestick, Error, IndexEntry, IndexEntryLike};
+use crate::{Candlestick, Error, IndexEntry, IndexEntryLike, ema};
 
 #[derive(Clone, Debug)]
 pub struct DmiEntry {

@@ -17,7 +17,7 @@
 
 use std::fmt::Display;
 
-use crate::{ema, Error, IndexEntryLike};
+use crate::{Error, IndexEntryLike, ema};
 
 #[derive(Debug, Clone)]
 pub struct MacdEntry {

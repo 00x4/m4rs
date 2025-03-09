@@ -15,7 +15,7 @@
 //! let result = m4rs::rma(&candlesticks, 20);
 //! ```
 
-use crate::{ema_with_alpha, Error, IndexEntry, IndexEntryLike};
+use crate::{Error, IndexEntry, IndexEntryLike, ema_with_alpha};
 
 /// Returns RMA (Running Moving Average) for given IndexEntry list
 pub fn rma(entries: &[impl IndexEntryLike], duration: usize) -> Result<Vec<IndexEntry>, Error> {

@@ -20,7 +20,7 @@
 
 use std::fmt::Display;
 
-use crate::{sma, Candlestick, Error, IndexEntry, IndexEntryLike};
+use crate::{Candlestick, Error, IndexEntry, IndexEntryLike, sma};
 
 #[derive(Clone, Debug)]
 pub struct StochasticsEntry {

@@ -15,7 +15,7 @@
 //! let result = m4rs::dema(&candlesticks, 9);
 //! ```
 
-use crate::{ema, Error, IndexEntry, IndexEntryLike};
+use crate::{Error, IndexEntry, IndexEntryLike, ema};
 
 /// Returns DEMA (Double Exponential Moving Average) for given IndexEntry list
 pub fn dema(entries: &[impl IndexEntryLike], duration: usize) -> Result<Vec<IndexEntry>, Error> {
