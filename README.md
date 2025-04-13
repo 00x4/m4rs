@@ -17,6 +17,7 @@
     - Heikin Ashi
     - HMA
     - Ichimoku Kinko Hyo
+    - LWMA
     - MACD
     - Momentum
     - Parabolic SAR
