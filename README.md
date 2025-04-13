@@ -37,6 +37,8 @@
 
 # Installation
 
+- MSRV 1.85.1
+
 ```sh
 cargo add m4rs
 ```
