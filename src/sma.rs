@@ -28,10 +28,10 @@ pub fn sma(entries: &[impl IndexEntryLike], duration: usize) -> Result<Vec<Index
     let mut sorted = entries.to_owned();
     sorted.sort_by_key(|x| x.get_at());
     Ok((0..=(sorted.len() - duration))
-        .map(|i| sorted.iter().skip(i).take(duration))
+        .map(|i| sorted.iter().skip(i).take(duration).collect::<Vec<_>>())
         .map(|xs| IndexEntry {
-            at: xs.clone().last().unwrap().get_at(),
-            value: xs.fold(0.0, |z, x| z + x.get_value()) / (duration as f64),
+            at: xs.last().unwrap().get_at(),
+            value: xs.iter().fold(0.0, |z, x| z + x.get_value()) / (duration as f64),
         })
         .collect())
 }

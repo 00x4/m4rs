@@ -157,9 +157,9 @@ pub fn slow_stochastics(
 fn calc_k(entries: &[Candlestick], duration: usize) -> Vec<IndexEntry> {
     (0..entries.len() - duration + 1)
         .map(|i| {
-            let xs = entries.iter().skip(i).take(duration);
-            let lowest = xs.clone().map(|x| x.low).reduce(|z, x| z.min(x)).unwrap();
-            let n = xs.clone().map(|x| x.high).reduce(|z, x| z.max(x)).unwrap() - lowest;
+            let xs: Vec<_> = entries.iter().skip(i).take(duration).collect();
+            let lowest = xs.iter().map(|x| x.low).reduce(|z, x| z.min(x)).unwrap();
+            let n = xs.iter().map(|x| x.high).reduce(|z, x| z.max(x)).unwrap() - lowest;
             let last = xs.last().unwrap();
             let k = if n == 0.0 {
                 0.0

@@ -51,11 +51,11 @@ pub fn williams_fractals(
 
     let take_range = duration * 2 + 1;
     let ret: Vec<WilliamsFractalsEntry> = (0..=(sorted.len() - take_range))
-        .map(|i| sorted.iter().skip(i).take(take_range))
+        .map(|i| sorted.iter().skip(i).take(take_range).collect::<Vec<_>>())
         .map(|xs| {
-            let mid = xs.clone().nth(duration).unwrap();
-            let init = xs.clone().take(duration);
-            let tail = xs.clone().skip(duration + 1).take(duration);
+            let mid = xs.get(duration).unwrap();
+            let init = xs.iter().take(duration);
+            let tail = xs.iter().skip(duration + 1).take(duration);
             let up = init
                 .clone()
                 .map(|x| x.high)
@@ -68,8 +68,8 @@ pub fn williams_fractals(
                     .reduce(|z, x| z.max(x))
                     .unwrap()
                     < mid.high;
-            let down = init.clone().map(|x| x.low).reduce(|z, x| z.min(x)).unwrap() > mid.low
-                && tail.clone().map(|x| x.low).reduce(|z, x| z.min(x)).unwrap() > mid.low;
+            let down = init.map(|x| x.low).reduce(|z, x| z.min(x)).unwrap() > mid.low
+                && tail.map(|x| x.low).reduce(|z, x| z.min(x)).unwrap() > mid.low;
             WilliamsFractalsEntry {
                 at: mid.at,
                 up,

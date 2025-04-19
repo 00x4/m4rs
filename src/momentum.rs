@@ -34,7 +34,7 @@ pub fn momentum(
         .map(|i| sorted.iter().skip(i).take(duration + 1))
         .map(|mut xs| {
             let head = xs.next().unwrap();
-            let last = xs.last().unwrap();
+            let last = xs.next_back().unwrap();
             IndexEntry {
                 at: last.get_at(),
                 value: last.get_value() - head.get_value(),

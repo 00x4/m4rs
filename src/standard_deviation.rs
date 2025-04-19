@@ -31,12 +31,12 @@ pub fn standard_deviation(
     sorted.sort_by_key(|x| x.get_at());
 
     Ok((0..=(sorted.len() - duration))
-        .map(|i| sorted.iter().skip(i).take(duration))
+        .map(|i| sorted.iter().skip(i).take(duration).collect::<Vec<_>>())
         .map(|xs| {
             let d = duration as f64;
-            let avg = xs.clone().fold(0.0, |z, x| z + x.get_value()) / d;
+            let avg = xs.iter().fold(0.0, |z, x| z + x.get_value()) / d;
             let value = (xs
-                .clone()
+                .iter()
                 .fold(0.0, |z, x| z + (x.get_value() - avg).abs().powi(2))
                 / d)
                 .sqrt();
