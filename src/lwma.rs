@@ -1,4 +1,4 @@
-//! Momentum
+//! LWMA (Linear Weighted Moving Average)
 //!
 //! # Examples
 //! ```rust
@@ -11,17 +11,14 @@
 //!     m4rs::Candlestick::new(1719400005, 90.0, 100.0, 70.0, 82.0, 1000.0),
 //! ];
 //!
-//! // Get Momentum calculation result
-//! let result = m4rs::momentum(&candlesticks, 10);
+//! // Get 20LWMA calculation result
+//! let result = m4rs::lwma(&candlesticks, 20);
 //! ```
 
 use crate::{Error, IndexEntry, IndexEntryLike};
 
-/// Returns Momentum for given IndexEntry list
-pub fn momentum(
-    entries: &[impl IndexEntryLike],
-    duration: usize,
-) -> Result<Vec<IndexEntry>, Error> {
+/// Returns LWMA (Linear Weighted Moving Average) for given IndexEntry list
+pub fn lwma(entries: &[impl IndexEntryLike], duration: usize) -> Result<Vec<IndexEntry>, Error> {
     if duration == 0 || entries.len() < duration {
         return Ok(vec![]);
     }
@@ -30,14 +27,20 @@ pub fn momentum(
     let mut sorted = entries.to_owned();
     sorted.sort_by_key(|x| x.get_at());
 
-    Ok((0..(sorted.len() - duration))
-        .map(|i| sorted.iter().skip(i).take(duration + 1))
-        .map(|mut xs| {
-            let head = xs.next().unwrap();
-            let last = xs.next_back().unwrap();
+    let d = duration as f64;
+    let weight_sum: f64 = d * (d + 1.0) / 2.0;
+
+    Ok((0..=(sorted.len() - duration))
+        .map(|i| {
+            let xs = sorted.iter().skip(i).take(duration);
+            let weighted_sum: f64 = xs
+                .enumerate()
+                .map(|(j, x)| x.get_value() * ((j + 1) as f64))
+                .sum();
+
             IndexEntry {
-                at: last.get_at(),
-                value: last.get_value() - head.get_value(),
+                at: sorted[i + duration - 1].get_at(),
+                value: weighted_sum / weight_sum,
             }
         })
         .collect())

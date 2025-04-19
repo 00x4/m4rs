@@ -95,11 +95,11 @@ pub fn bolinger_band(
 
     Ok((0..sorted.len() - duration + 1)
         .map(|i| {
-            let xs = sorted.iter().skip(i).take(duration);
+            let xs = sorted.iter().skip(i).take(duration).collect::<Vec<_>>();
             let d = duration as f64;
-            let avg = xs.clone().fold(0.0, |z, x| z + x.get_value()) / d;
+            let avg = xs.iter().fold(0.0, |z, x| z + x.get_value()) / d;
             let sigma = xs
-                .clone()
+                .iter()
                 .fold(0.0, |z, x| z + (x.get_value() - avg).powi(2) / d)
                 .sqrt();
             BollingerBandEntry {

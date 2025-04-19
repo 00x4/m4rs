@@ -49,10 +49,10 @@ pub fn cci(entries: &[Candlestick], duration: usize) -> Result<Vec<IndexEntry>, 
 
 fn average_deviations(xs: &[IndexEntry], duration: usize) -> Vec<IndexEntry> {
     (0..=(xs.len() - duration))
-        .map(|i| xs.iter().skip(i).take(duration))
+        .map(|i| xs.iter().skip(i).take(duration).collect::<Vec<_>>())
         .map(|xs| IndexEntry {
-            at: xs.clone().last().unwrap().at,
-            value: average_deviation(&xs.map(|x| x.get_value()).collect::<Vec<f64>>()),
+            at: xs.last().unwrap().at,
+            value: average_deviation(&xs.iter().map(|x| x.get_value()).collect::<Vec<f64>>()),
         })
         .collect()
 }

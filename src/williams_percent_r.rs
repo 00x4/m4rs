@@ -32,9 +32,9 @@ pub fn williams_percent_r(
 
     Ok((0..=sorted.len() - duration)
         .map(|i| {
-            let xs = sorted.iter().skip(i).take(duration);
-            let highest = xs.clone().map(|x| x.high).reduce(|z, x| z.max(x)).unwrap();
-            let lowest = xs.clone().map(|x| x.low).reduce(|z, x| z.min(x)).unwrap();
+            let xs: Vec<_> = sorted.iter().skip(i).take(duration).collect();
+            let highest = xs.iter().map(|x| x.high).reduce(|z, x| z.max(x)).unwrap();
+            let lowest = xs.iter().map(|x| x.low).reduce(|z, x| z.min(x)).unwrap();
             let n = highest - lowest;
             let last = xs.last().unwrap();
             IndexEntry {

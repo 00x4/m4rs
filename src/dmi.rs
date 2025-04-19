@@ -109,28 +109,31 @@ pub fn dmi(entries: &[Candlestick], duration: usize) -> Result<Vec<DmiEntry>, Er
         &calcs.iter().map(|x| x.tr()).collect::<Vec<IndexEntry>>(),
         duration,
     )?;
-    let dmis = tr_ma.iter().filter_map(|tr| {
-        match (
-            plus_dm_ma.iter().find(|x| x.at == tr.at),
-            minus_dm_ma.iter().find(|x| x.at == tr.at),
-        ) {
-            (None, _) | (_, None) => None,
-            (Some(plus_dm), Some(minus_dm)) => {
-                let plus_di = plus_dm.value / tr.value;
-                let minus_di = minus_dm.value / tr.value;
-                Some(DmiEntry {
-                    at: tr.at,
-                    plus_di,
-                    minus_di,
-                    dx: (plus_di - minus_di).abs() / (plus_di + minus_di),
-                    adx: 0.0,
-                })
+    let dmis: Vec<_> = tr_ma
+        .iter()
+        .filter_map(|tr| {
+            match (
+                plus_dm_ma.iter().find(|x| x.at == tr.at),
+                minus_dm_ma.iter().find(|x| x.at == tr.at),
+            ) {
+                (None, _) | (_, None) => None,
+                (Some(plus_dm), Some(minus_dm)) => {
+                    let plus_di = plus_dm.value / tr.value;
+                    let minus_di = minus_dm.value / tr.value;
+                    Some(DmiEntry {
+                        at: tr.at,
+                        plus_di,
+                        minus_di,
+                        dx: (plus_di - minus_di).abs() / (plus_di + minus_di),
+                        adx: 0.0,
+                    })
+                }
             }
-        }
-    });
+        })
+        .collect();
     let adxs = wilder_ma(
         &dmis
-            .clone()
+            .iter()
             .map(|x| IndexEntry {
                 at: x.at,
                 value: x.dx,
@@ -139,6 +142,7 @@ pub fn dmi(entries: &[Candlestick], duration: usize) -> Result<Vec<DmiEntry>, Er
         duration,
     )?;
     Ok(dmis
+        .iter()
         .filter_map(|dmi| {
             adxs.iter()
                 .find(|x| x.at == dmi.at)

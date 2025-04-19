@@ -30,12 +30,13 @@ pub fn wma(entries: &[impl IndexEntryLike], duration: usize) -> Result<Vec<Index
     sorted.sort_by_key(|x| x.get_at());
 
     Ok((0..=(sorted.len() - duration))
-        .map(|i| sorted.iter().skip(i).take(duration))
+        .map(|i| sorted.iter().skip(i).take(duration).collect::<Vec<_>>())
         .map(|xs| {
-            let at = xs.clone().last().unwrap().get_at();
+            let at = xs.iter().last().unwrap().get_at();
             let weights: Vec<f64> = (1..=duration).map(|x| x as f64).collect();
             let weights_sum = weights.iter().fold(0.0, |z, x| z + x);
             let value_sum = xs
+                .iter()
                 .zip(weights)
                 .map(|(x, w)| x.get_value() * w)
                 .fold(0.0, |z, x| z + x);

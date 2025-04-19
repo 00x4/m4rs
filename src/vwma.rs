@@ -28,9 +28,9 @@ pub fn vwma(entries: &[Candlestick], duration: usize) -> Result<Vec<IndexEntry>,
     sorted.sort_by(|a, b| a.at.cmp(&b.at));
 
     let res: Vec<IndexEntry> = (0..=(sorted.len() - duration))
-        .map(|i| sorted.iter().skip(i).take(duration))
+        .map(|i| sorted.iter().skip(i).take(duration).collect::<Vec<_>>())
         .map(|xs| {
-            let (cv, v) = xs.clone().fold((0.0, 0.0), |z, x| {
+            let (cv, v) = xs.iter().fold((0.0, 0.0), |z, x| {
                 (z.0 + x.close * x.volume, z.1 + x.volume)
             });
             IndexEntry {
