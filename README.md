@@ -29,6 +29,7 @@
     - Standard Deviation
     - Stochastics (Fast, Slow)
     - TEMA
+    - VWAP
     - VWMA
     - Williams Fractals
     - Williams %R
